@@ -27,7 +27,8 @@ gnu_debugdata: obj2yaml
 	cd yaml && \
 	cat ../header.yaml > %s && \
 	cat binary.yaml >> %s && \
-	grep --regexp='#\s*RUN:\s*'  ../header.yaml | sed 's/#\s*RUN\:\s*//g' > yaml.sh && \
+	echo "set -ex" > yaml.sh && \
+	grep --regexp='#\s*RUN:\s*'  ../header.yaml | sed 's/#\s*RUN\:\s*//g' >> yaml.sh && \
 	bash ./yaml.sh
 
 # Produce the final YAML file 
@@ -35,9 +36,7 @@ gnu_debugdata: obj2yaml
 final_yaml: gnu_debugdata
 	cat header.yaml > final.yaml
 	obj2yaml yaml/%t.withoutsymtab >> final.yaml
-	@echo
-	@echo All done. Please take a look at the final.yaml file
-	@echo
+	yaml2obj final.yaml | llvm-readelf -WSs && echo "ALL DONE SEE final.yaml" || echo "AN ERROR OCCURED ^"
 
 .PHONY: clean
 clean:
