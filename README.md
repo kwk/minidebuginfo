@@ -1,10 +1,10 @@
 # Creating an LLVM YAML file from a real program
 
-Inside the `source` directory you can find a small C++ program containing a `myexe` target that links agains the `mylib` target. No third party libraries are needed. 
+Inside the `source` directory you can find a small C++ program containing a `myexe` target that links against the `mylib` target. No third party libraries are needed. 
 
 Run `make` in the root directory!
 
-The goal is generate a `final.yaml` file that contains an ELF object in YAML representation. The resulting ELF file should contain a `.dynsym` and a `.gnu_debugdata` section which itself contains a `.symtab` section.
+The goal is to generate a `final.yaml` file that contains an ELF object in YAML representation. The resulting ELF file should contain a `.dynsym` and a `.gnu_debugdata` section which itself contains a `.symtab` section.
 
 ## Current Status
 
