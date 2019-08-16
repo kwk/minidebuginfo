@@ -1,0 +1,22 @@
+# This YAML file holds an ELF object file with a .symtab and a .dynsym section.
+
+# Test that LLDB can extract a .symtab from a xz-compressed .gnu_debugdata
+# section and combine the symbols with the symbols from the .dynsym section.
+
+# RUN: mkdir -p %t
+# RUN: yaml2obj %s > %t
+
+# RUN: cp  %t  %t.withoutsymtab
+# RUN: llvm-objcopy --remove-section=.symtab %t.withoutsymtab
+
+# RUN: xz --keep --force %t
+# RUN: llvm-objcopy --add-section .gnu_debugdata=%t.xz %t.withoutsymtab
+# RUN: lldb-test object-file %t.withoutsymtab | FileCheck %s
+
+# CHECK: Name: .dynsym
+# CHECK-NEXT: Type: elf-dynamic-symbols
+
+# CHECK: Name: .gnu_debugdata
+# CHECK-NEXT: Type: regular
+
+# CHECK-NOT: .symtab
