@@ -1,9 +1,11 @@
 # RUN: yaml2obj %s > %t
 
+# RUN: cp  %t  %t.withoutsymtab
+# RUN: llvm-objcopy --remove-section=.symtab %t.withoutsymtab
+
 # RUN: xz --keep --force %t
-# RUN: llvm-objcopy --add-section .gnu_debugdata=%t.xz %t
-# RUN: llvm-objcopy --remove-section=.symtab %t
-# RUN: lldb-test object-file %t | FileCheck %s
+# RUN: llvm-objcopy --add-section .gnu_debugdata=%t.xz %t.withoutsymtab
+# RUN: lldb-test object-file %t.withoutsymtab | FileCheck %s
 
 # CHECK: Name: .dynsym
 # CHECK-NEXT: Type: elf-dynamic-symbols
