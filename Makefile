@@ -35,7 +35,7 @@ gnu_debugdata: obj2yaml
 .PHONY: final_yaml
 final_yaml: gnu_debugdata
 	cat header.yaml > final.yaml
-	obj2yaml yaml/%t.withoutsymtab >> final.yaml
+	obj2yaml yaml/%t >> final.yaml
 	yaml2obj final.yaml | llvm-readelf -WSs && echo "ALL DONE SEE final.yaml" || echo "AN ERROR OCCURED ^"
 
 .PHONY: clean
